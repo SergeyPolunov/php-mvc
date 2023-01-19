@@ -1,0 +1,16 @@
+{
+    "name": "polunov/php-mvc",
+    "description": "simple php framework",
+    "authors": [
+        {
+            "name": "polunov sergey"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Core\\": "src/Core",
+            "App\\": "src/App"
+        }
+    }
+}
