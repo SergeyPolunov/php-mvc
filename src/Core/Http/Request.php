@@ -6,21 +6,18 @@ namespace Core\Http;
 
 class Request
 {
-    private ?array $parsedUrl;
-
-    public function __construct(array $server)
+    public function __construct(private array $server)
     {
-        $this->parseServer($server);
     }
 
-    private function parseServer(array $server): void
+    public function getUrlPath(): string
     {
-        $url = sprintf('%s://%s%s', $server['REQUEST_SCHEME'], $server['HTTP_HOST'], $server['REQUEST_URI']);
-        $this->parsedUrl = parse_url($url);
+        $pieces = explode('?', $this->server['REQUEST_URI']);
+        return $pieces[0] ?? '/';
     }
 
-    public function getPath(): string
+    public function getMethod(): string
     {
-        return $this->parsedUrl['path'] ?? '';
+        return $this->server['REQUEST_METHOD'] ?? 'GET';
     }
 }
