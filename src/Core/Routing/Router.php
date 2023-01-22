@@ -16,7 +16,9 @@ class Router
 
     public function __construct()
     {
-        $this->routes = $this->validateRoutes(require getcwd() . '/routes/web.php');
+        $this->routes = $this->validateRoutes(
+            require_file("routes/web.php")
+        );
     }
 
     public function validateRoutes(array $routes): array
@@ -35,9 +37,15 @@ class Router
         $method = $request->getMethod();
 
         $route = $this->findRoute($method, $urlPath);
+        $action = $route->getAction();
 
-        if (is_callable($route->getAction())) {
-            return $route->getAction()();
+//        Todo make an invokable controller homework lesson3
+        if (is_array($action) && count($action) === 2) {
+            return (new $action[0])->{$action[1]}();
+        }
+
+        if (is_callable($action)) {
+            return $action();
         }
 
         throw new InvalidRouteAction();
@@ -47,7 +55,7 @@ class Router
     private function findRoute(string $method, string $urlPath): Route
     {
         foreach ($this->routes as $route) {
-            if ($route->getUrl() === $urlPath && $route->getMethod() === $method) {
+            if ($route->getUrl() === rtrim($urlPath, '/') && $route->getMethod() === $method) {
                 return $route;
             }
         }

@@ -1,28 +1,11 @@
 <?php
 
-use Core\Http\Response;
 use Core\Routing\Route;
+use App\Http\UsersController;
+use App\Http\PostsController;
 
 return [
-    new Route(
-        'GET',
-        '/users/',
-        function () {
-            return new Response('get_users');
-        }
-    ),
-    new Route(
-        'POST',
-        '/users/',
-        function () {
-            return new Response('post_users');
-        }
-    ),
-    new Route(
-        'GET',
-        '/posts/',
-        function () {
-            return new Response('posts');
-        }
-    )
+    new Route('GET','/users', [UsersController::class, 'show']),
+    new Route('POST','/users', [UsersController::class, 'create']),
+    new Route('GET','/posts', [PostsController::class, 'show']),
 ];

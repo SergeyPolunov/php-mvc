@@ -6,15 +6,15 @@ namespace Core;
 
 use Core\Http\Request;
 use Core\Http\Response;
-use Core\Routing\Exceptions\InvalidRouteAction;
-use Core\Routing\Exceptions\RouteNotFound;
+use Core\Routing\Exceptions\RoutingException;
 use Core\Routing\Router;
+use Throwable;
 
 class Application
 {
     private Router $router;
 
-    public function __construct()
+    public function __construct(private bool $debug = false)
     {
         $this->router = new Router();
     }
@@ -24,18 +24,31 @@ class Application
         try {
             $response = $this->router->run($request);
 
-            return $this->wrapRouterResponse($response);
-        } catch (InvalidRouteAction | RouteNotFound) {
-            return new Response('Page not found', 404);
+            return $this->wrapResponse($response);
+        } catch (Throwable $exception) {
+            return $this->handleException($exception);
         }
     }
 
-    private function wrapRouterResponse(mixed $response): Response
+    private function wrapResponse(mixed $response): Response
     {
         if ($response instanceof Response) {
             return $response;
         }
 
         return new Response((string)$response);
+    }
+
+    private function handleException(\Throwable $exception): Response
+    {
+        if ($this->debug) {
+            throw $exception;
+        }
+
+        if ($exception instanceof RoutingException) {
+            return new Response('Page not found', 404);
+        }
+
+        return new Response($exception->getMessage(), 500);
     }
 }

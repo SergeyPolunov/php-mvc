@@ -6,11 +6,16 @@
             "name": "polunov sergey"
         }
     ],
-    "require": {},
+    "require": {
+        "vlucas/phpdotenv": "^5.5"
+    },
     "autoload": {
         "psr-4": {
             "Core\\": "src/Core",
             "App\\": "src/App"
-        }
+        },
+        "files": [
+            "bootstrap/helpers.php"
+        ]
     }
 }
