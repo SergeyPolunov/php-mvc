@@ -1,21 +1,28 @@
 <?php
 
+use Core\Http\Response;
+use Core\Routing\Route;
+
 return [
-    [
-        'method' => 'GET',
-        'url' => '/users/',
-        'action' => function () {
-            return 'Users';
-        },
-    ],
-    [
-        'method' => 'POST',
-        'url' => '/users/',
-        'action' => [],
-    ],
-    [
-        'method' => 'GET',
-        'url' => '/posts/',
-        'action' => [],
-    ],
+    new Route(
+        'GET',
+        '/users/',
+        function () {
+            return new Response('get_users');
+        }
+    ),
+    new Route(
+        'POST',
+        '/users/',
+        function () {
+            return new Response('post_users');
+        }
+    ),
+    new Route(
+        'GET',
+        '/posts/',
+        function () {
+            return new Response('posts');
+        }
+    )
 ];
