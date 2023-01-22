@@ -32,7 +32,9 @@ class Application
 
     private function wrapRouterResponse(mixed $response): Response
     {
-        if ($response instanceof Response) return $response;
+        if ($response instanceof Response) {
+            return $response;
+        }
 
         return new Response((string)$response);
     }
