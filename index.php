@@ -5,7 +5,12 @@ require __DIR__ . '/vendor/autoload.php';
 use Core\Application;
 use Core\Http\Request;
 
-$application = new Application();
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$application = new Application(
+    env('APP_DEBUG',false)
+);
 
 $request = new Request($_SERVER);
 

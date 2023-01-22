@@ -25,6 +25,12 @@ docker-compose up -d
 composer install
 ```
 
+**5.** Run the following command (for Windows platform use copy command)
+bash
+```bash
+cp .env.example .env
+```
+
 ## Docker commands:
 
 **1.** Show containers list.
