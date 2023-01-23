@@ -11,7 +11,7 @@ use Core\Routing\Exceptions\RouteNotFound;
 
 class Router
 {
-    /** @var Route[]  */
+    /** @var Route[] */
     private array $routes;
 
     public function __construct()
@@ -40,6 +40,9 @@ class Router
         $action = $route->getAction();
 
 //        Todo make an invokable controller homework lesson3
+        if (is_array($action) && count($action) === 1) {
+            return (new $action[0])();
+        }
         if (is_array($action) && count($action) === 2) {
             return (new $action[0])->{$action[1]}();
         }
@@ -54,8 +57,10 @@ class Router
     /** @throws RouteNotFound */
     private function findRoute(string $method, string $urlPath): Route
     {
+        $urlPath = $urlPath === '/' ? $urlPath : rtrim($urlPath, '/');
+
         foreach ($this->routes as $route) {
-            if ($route->getUrl() === rtrim($urlPath, '/') && $route->getMethod() === $method) {
+            if ($route->getUrl() === $urlPath && $route->getMethod() === $method) {
                 return $route;
             }
         }
