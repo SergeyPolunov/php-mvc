@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Core\Routing;
 
 use Core\Http\Request;
-use Core\Routing\Route;
 use Core\Routing\Exceptions\InvalidRouteAction;
 use Core\Routing\Exceptions\RouteNotFound;
 
@@ -39,10 +38,10 @@ class Router
         $route = $this->findRoute($method, $urlPath);
         $action = $route->getAction();
 
-//        Todo make an invokable controller homework lesson3
         if (is_array($action) && count($action) === 1) {
             return (new $action[0])();
         }
+
         if (is_array($action) && count($action) === 2) {
             return (new $action[0])->{$action[1]}();
         }
