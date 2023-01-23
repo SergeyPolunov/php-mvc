@@ -10,14 +10,28 @@ if (!function_exists('require_file')) {
 if (!function_exists('env')) {
     function env(string $key, mixed $default = null): mixed
     {
-        $value = $_ENV[$key] ?? $default;
+        static $repository;
 
-        if (is_numeric($value)) {
-            return $value;
+        if ($repository === null) {
+            $repository = \Dotenv\Repository\RepositoryBuilder::createWithDefaultAdapters()
+                ->immutable()
+                ->make();
         }
 
-        $boolValue = filter_var($value,FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
+        $value = $repository->get($key);
 
-        return $boolValue ?? $value;
+        if ($value === null) {
+            return $default;
+        }
+
+        if (is_numeric($value)) {
+            return +$value;
+        }
+
+        return match ($value) {
+            'true' => true,
+            'false' => false,
+            'null' => $default
+        };
     }
 }
