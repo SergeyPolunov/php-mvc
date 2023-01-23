@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Core\Routing;
 
+use BadMethodCallException;
+
 /**
  * @method static self get(string $url, mixed $action)
  * @method static self post(string $url, mixed $action)
@@ -15,7 +17,7 @@ class Route
 {
     private const AVAILABLE_METHODS = ['get', 'post', 'put', 'patch', 'delete'];
 
-    public function __construct(private string $method, private string $url, private $action)
+    private function __construct(private string $method, private string $url, private $action)
     {
     }
 
@@ -24,6 +26,8 @@ class Route
         if (in_array($name, self::AVAILABLE_METHODS)) {
             return new self(strtoupper($name), ...$arguments);
         }
+
+        throw new BadMethodCallException("Method $name doesn't exist");
     }
 
     public function getMethod(): string
