@@ -1,5 +1,7 @@
 <?php
 
+use Dotenv\Repository\RepositoryBuilder;
+
 if (!function_exists('require_file')) {
     function require_file(string $path): mixed
     {
@@ -13,7 +15,7 @@ if (!function_exists('env')) {
         static $repository;
 
         if ($repository === null) {
-            $repository = \Dotenv\Repository\RepositoryBuilder::createWithDefaultAdapters()
+            $repository = RepositoryBuilder::createWithDefaultAdapters()
                 ->immutable()
                 ->make();
         }
@@ -33,5 +35,26 @@ if (!function_exists('env')) {
             'false' => false,
             'null' => $default
         };
+    }
+}
+
+if (!function_exists('config')) {
+    function config(string $file): array
+    {
+        return require_file('config' . DIRECTORY_SEPARATOR . ltrim($file, DIRECTORY_SEPARATOR));
+    }
+}
+
+if (!function_exists('path')) {
+    function path(string $path): string
+    {
+        return getcwd() . DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR);
+    }
+}
+
+if (!function_exists('safe_var')) {
+    function safe_var(mixed $value, mixed $default): string
+    {
+        return $value ?? $default;
     }
 }

@@ -14,9 +14,11 @@ class Application
 {
     private Router $router;
 
-    public function __construct(private bool $debug = false)
+    public function __construct(private array $config)
     {
-        $this->router = new Router();
+        $this->router = new Router(
+            require_file('routes/web.php')
+        );
     }
 
     public function handle(Request $request): Response
@@ -39,9 +41,9 @@ class Application
         return new Response((string)$response);
     }
 
-    private function handleException(\Throwable $exception): Response
+    private function handleException(Throwable $exception): Response
     {
-        if ($this->debug) {
+        if ($this->config['debug']) {
             throw $exception;
         }
 

@@ -10,14 +10,13 @@ use Core\Routing\Exceptions\RouteNotFound;
 
 class Router
 {
-    /** @var Route[] */
-    private array $routes;
-
-    public function __construct()
+    /**
+     * Router constructor.
+     * @param Route[] $routes
+     */
+    public function __construct(private array $routes)
     {
-        $this->routes = $this->validateRoutes(
-            require_file("routes/web.php")
-        );
+        $this->routes = $this->validateRoutes($this->routes);
     }
 
     public function validateRoutes(array $routes): array
