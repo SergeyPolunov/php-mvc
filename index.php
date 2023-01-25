@@ -9,7 +9,7 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 $application = new Application(
-    env('APP_DEBUG',false)
+    config('app.php')
 );
 
 $request = new Request($_SERVER);
